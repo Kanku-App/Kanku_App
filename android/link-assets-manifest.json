@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/NauticaRounded-Bold.ttf",
+      "sha1": "e81475f1a94a9323a55882fe5260195fd4aff40f"
+    },
+    {
+      "path": "src/assets/fonts/NauticaRounded-Regular.ttf",
+      "sha1": "5b4067f70901712f2223d2d5512fdefde4f11a2a"
+    },
+    {
+      "path": "src/assets/fonts/NauticaRounded-SemiBold.ttf",
+      "sha1": "a5fc9235433feca902b071a05c62f6a8efdf9554"
+    },
+    {
+      "path": "src/assets/fonts/sf-pro-text-bold.ttf",
+      "sha1": "31667a859b586e079d2e6d9193b8d245c939adb6"
+    },
+    {
+      "path": "src/assets/fonts/sf-pro-text-medium.ttf",
+      "sha1": "62f39df9906a56dc84d68caf2996940413e55525"
+    },
+    {
+      "path": "src/assets/fonts/sf-pro-text-regular.ttf",
+      "sha1": "cded5e96ac169b65519e822d4ae6428e2ada9f31"
+    },
+    {
+      "path": "src/assets/fonts/sf-pro-text-semibold.ttf",
+      "sha1": "eb4d4aa16e23ce6374667c66fc750501a34ac9a4"
+    }
+  ]
+}
