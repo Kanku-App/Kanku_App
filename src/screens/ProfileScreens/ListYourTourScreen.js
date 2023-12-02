@@ -36,6 +36,7 @@ const ListYourTourScreen = ({route}) => {
 
   const getTourHandler = () => {
     setLoading(true);
+    // setLoading(true);
     get_tour_all_byid(userDetail?.user?.id)
       .then(res => {
         console.log('res', res);
