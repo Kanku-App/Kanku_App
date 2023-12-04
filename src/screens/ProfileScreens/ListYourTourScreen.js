@@ -62,6 +62,7 @@ const ListYourTourScreen = ({route}) => {
     setLoading(true);
     var formdata = new FormData();
     formdata.append('tours_id', tourId);
+    console.log('formdata', formdata);
     delete_tour(formdata)
       .then(result => {
         console.log('deleteresult', result);

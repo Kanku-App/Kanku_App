@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   View,
@@ -11,32 +11,34 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import MyStatusBar from '../../elements/MyStatusBar';
 import Theme from '../../theme';
-import { useSelector } from 'react-redux';
-import { get_tour_published } from '../../services/Api';
-import { useFocusEffect } from '@react-navigation/native';
-const HomeScreen = ({ route }) => {
-  const userDetail = useSelector((state) => state?.auth)
+import {useSelector} from 'react-redux';
+import {get_tour_published} from '../../services/Api';
+import {useFocusEffect} from '@react-navigation/native';
+const HomeScreen = ({route}) => {
+  const userDetail = useSelector(state => state?.auth);
   const navigation = useNavigation();
   const [searchTxt, setSearchTxt] = useState('');
   const [TourCategoryData, setTourCategoryData] = useState([]);
   const [loading, setLoading] = useState([]);
 
-
   const getPublisTour = () => {
-    setLoading(true)
-    get_tour_published(userDetail?.user?.id).then(response => {
-      if (response.status == "1") {
-        setTourCategoryData(response?.tours);
-      }
-    }).catch((err) => {
-      console.log("err", err)
-    }).finally(() => {
-      setLoading(false)
-
-    })
+    setLoading(true);
+    get_tour_published(userDetail?.user?.id)
+      .then(response => {
+        console.log('response', response);
+        if (response.status == '1') {
+          setTourCategoryData(response?.tours);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useFocusEffect(
@@ -47,12 +49,12 @@ const HomeScreen = ({ route }) => {
 
   const SecondListData = [];
 
-  const CityDataRender = ({ item }) => {
+  const CityDataRender = ({item}) => {
     return (
-      <View style={{ flexDirection: 'column', marginHorizontal: 10 }}>
+      <View style={{flexDirection: 'column', marginHorizontal: 10}}>
         <Image
-          source={{ uri: item.city_image }}
-          style={{ width: 55, height: 55, borderRadius: 110 }}
+          source={{uri: item.city_image}}
+          style={{width: 55, height: 55, borderRadius: 110}}
           resizeMode="contain"
         />
         <Text
@@ -69,10 +71,10 @@ const HomeScreen = ({ route }) => {
     );
   };
 
-  const HomeTourDataRender = ({ item }) => {
+  const HomeTourDataRender = ({item}) => {
     return (
       <Pressable
-        onPress={() => navigation.navigate('HomeTourDetails', { item })}
+        onPress={() => navigation.navigate('HomeTourDetails', {item})}
         style={{
           flexDirection: 'column',
           marginHorizontal: 10,
@@ -81,24 +83,30 @@ const HomeScreen = ({ route }) => {
           borderRadius: 25,
           shadowColor: 'light-grey',
           backgroundColor: 'white',
-          width: "90%",
+          width: '90%',
           alignSelf: 'center',
           paddingBottom: 10,
-          elevation: 2
+          elevation: 2,
         }}>
-        <View style={{ width: "100%", height: 260, borderRadius: 25, elevation: 3, backgroundColor: "#fff" }}>
+        <View
+          style={{
+            width: '100%',
+            height: 260,
+            borderRadius: 25,
+            elevation: 3,
+            backgroundColor: '#fff',
+          }}>
           <Image
-            source={{ uri: item.tours_image }}
+            source={{uri: item.tours_image}}
             style={{
-              height: "100%",
+              height: '100%',
               borderRadius: 25,
             }}
             resizeMode="cover"
           />
         </View>
 
-
-        <View style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 15 }}>
+        <View style={{flex: 1, paddingHorizontal: 10, paddingVertical: 15}}>
           <Text
             style={{
               marginLeft: 10,
@@ -111,9 +119,9 @@ const HomeScreen = ({ route }) => {
           </Text>
 
           <View
-            style={{ marginHorizontal: 10, flexDirection: 'row', marginTop: 15 }}>
+            style={{marginHorizontal: 10, flexDirection: 'row', marginTop: 15}}>
             <Image
-              style={{ width: 20, height: 20 }}
+              style={{width: 20, height: 20}}
               source={require('../../assets/tabIcons/tours_icon.png')}
             />
             <Text
@@ -126,7 +134,7 @@ const HomeScreen = ({ route }) => {
               {item.tours_location}
 
               <Text
-                onPress={() => { }}
+                onPress={() => {}}
                 style={{
                   fontSize: 12,
                   color: 'black',
@@ -134,14 +142,15 @@ const HomeScreen = ({ route }) => {
                   fontFamily: Theme.FONT_FAMILY_BOLD,
                   color: Theme.PRIMARY_COLOR,
                 }}>
-                {" "}View More
+                {' '}
+                View More
               </Text>
             </Text>
           </View>
 
-          <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          <View style={{flexDirection: 'row', marginTop: 10}}>
             <Image
-              style={{ width: 30, height: 30, alignSelf: 'center' }}
+              style={{width: 30, height: 30, alignSelf: 'center'}}
               source={require('../../assets/dummyImages/dummy_circle_image_1.png')}
             />
 
@@ -206,7 +215,7 @@ const HomeScreen = ({ route }) => {
         }}>
         <Image
           source={require('../../assets/icons/search_icon.png')}
-          style={{ width: 16, height: 16, alignSelf: 'center' }}
+          style={{width: 16, height: 16, alignSelf: 'center'}}
         />
 
         <TextInput
@@ -222,7 +231,7 @@ const HomeScreen = ({ route }) => {
 
         <Image
           source={require('../../assets/icons/filter_icon.png')}
-          style={{ width: 20, height: 20, alignSelf: 'center' }}
+          style={{width: 20, height: 20, alignSelf: 'center'}}
         />
       </View>
 
@@ -237,33 +246,39 @@ const HomeScreen = ({ route }) => {
           />
         </View> */}
 
-        {loading ?
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: Dimensions.get("screen").height / 1.5 }}>
-            <ActivityIndicator size={"small"} />
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: Dimensions.get('screen').height / 1.5,
+            }}>
+            <ActivityIndicator size={'small'} />
           </View>
-          :
-          TourCategoryData?.length === 0 ?
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <Text
-                style={{
-                  justifyContent: 'center',
-                  fontSize: 16,
-                  fontFamily: Theme.FONT_FAMILY_MEDIUM,
-                  color: 'black',
-                  marginLeft: 20,
-                }}>
-                No Data here
-              </Text>
-            </View>
-            :
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              keyExtractor={(item, index) => index.toString()}
-              style={{ flex: 1 }}
-              data={TourCategoryData}
-              renderItem={HomeTourDataRender}
-            />
-        }
+        ) : TourCategoryData?.length === 0 ? (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text
+              style={{
+                justifyContent: 'center',
+                fontSize: 16,
+                fontFamily: Theme.FONT_FAMILY_MEDIUM,
+                color: 'black',
+                marginLeft: 20,
+              }}>
+              No Data here
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            style={{flex: 1}}
+            data={TourCategoryData}
+            renderItem={HomeTourDataRender}
+          />
+        )}
       </ScrollView>
     </View>
   );

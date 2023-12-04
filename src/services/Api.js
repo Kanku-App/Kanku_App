@@ -118,3 +118,19 @@ export const get_booking_list = async postdata => {
   const URL = DOMAIN + `bookings/all/${postdata}`;
   return authAxios.get(URL);
 };
+
+export const add_chat = async postdata => {
+  const URL = DOMAIN + 'chats/add';
+  return authAxios.post(URL, postdata);
+};
+
+export const get_chat = async postdata => {
+  console.log('postdata', postdata);
+  const URL = DOMAIN + `chats/all/${postdata}`;
+  return authAxios.get(URL);
+};
+
+export const get_inbox = async postdata => {
+  const URL = DOMAIN + `chats/all/${postdata}`;
+  return authAxios.get(URL);
+};

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   View,
@@ -8,35 +8,44 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import MyStatusBar from '../../elements/MyStatusBar';
 import Theme from '../../theme';
-import Ionicons from "react-native-vector-icons/Ionicons"
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import MyButton from '../../elements/MyButton';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import CustomMapView from './CustomMapView';
-import { useFocusEffect } from '@react-navigation/native';
-import { add_tour_wish, get_tour_details, remove_tour_wish } from '../../services/Api';
-import { useSelector } from 'react-redux';
-const HomeTourDetailScreen = ({ route }) => {
-  const userDetails = useSelector((state) => state?.auth)
-  const { item } = route?.params
+import {useFocusEffect} from '@react-navigation/native';
+import {
+  add_tour_wish,
+  get_tour_details,
+  remove_tour_wish,
+} from '../../services/Api';
+import {useSelector} from 'react-redux';
+const HomeTourDetailScreen = ({route}) => {
+  const userDetails = useSelector(state => state?.auth);
+  const {item} = route?.params;
+  console.log('itemm', item);
   const navigation = useNavigation();
   const [isDetailsSelected, setIsDetailsSelected] = useState(true);
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(false);
 
-
   const getTourHandler = () => {
-    get_tour_details(item.tours_id || item?.wish_lists_tours_id, userDetails?.user?.id).then((res) => {
-      if (res?.status == "1") {
-        setDetails(res?.tour)
-      }
-    }).catch((err) => {
-      console.log("err", err)
-    })
-  }
+    get_tour_details(
+      item.tours_id || item?.wish_lists_tours_id,
+      userDetails?.user?.id,
+    )
+      .then(res => {
+        if (res?.status == '1') {
+          setDetails(res?.tour);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  };
   useFocusEffect(
     React.useCallback(() => {
       getTourHandler();
@@ -44,54 +53,60 @@ const HomeTourDetailScreen = ({ route }) => {
   );
 
   const tour_wishAdd = () => {
-    setLoading(true)
+    setLoading(true);
     const data = {
-      wish_lists_tours_id: item?.tours_id,
-      wish_lists_users_id: userDetails?.user?.id
-    }
-    add_tour_wish(data).then((res) => {
-      if (res?.status == "1") {
-        getTourHandler()
-      } else {
-        console.log("else", res)
-      }
-    }).catch((err) => {
-      console.log("err", err)
-    }).finally(() => {
-      setLoading(false)
-    })
-  }
+      wish_lists_tours_id: item?.tours_id || item?.wish_lists_tours_id,
+      wish_lists_users_id: userDetails?.user?.id,
+    };
+    add_tour_wish(data)
+      .then(res => {
+        if (res?.status == '1') {
+          getTourHandler();
+        } else {
+          console.log('else', res);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const tour_wishRemove = () => {
-    setLoading(true)
+    setLoading(true);
     const data = {
-      wish_tours_id: item?.tours_id,
-      wish_users_id: userDetails?.user?.id
-    }
-    remove_tour_wish(data).then((res) => {
-      if (res?.status == "1") {
-        console.log("resss", res)
-        getTourHandler()
-      }
-    }).catch((err) => {
-      console.log("err", err)
-    }).finally(() => {
-      setLoading(false)
-    })
-  }
-
+      wish_tours_id: item?.tours_id || item?.wish_lists_tours_id,
+      wish_users_id: userDetails?.user?.id,
+    };
+    console.log('dataa', data);
+    remove_tour_wish(data)
+      .then(res => {
+        if (res?.status == '1') {
+          console.log('resss', res);
+          getTourHandler();
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
-
-        <View style={{
-          borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 30,
-          height: 424,
-          overflow: "hidden",
-          elevation: 2
-        }}>
+    <View style={{flex: 1}}>
+      <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+        <View
+          style={{
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+            height: 424,
+            overflow: 'hidden',
+            elevation: 2,
+          }}>
           <View style={styles.topIconsContainer}>
             <Pressable onPress={() => navigation.goBack()}>
               <Image
@@ -100,31 +115,38 @@ const HomeTourDetailScreen = ({ route }) => {
                 style={styles.backImgStyle}
               />
             </Pressable>
-            <View style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
-
+            <View style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
               <Image
                 source={require('../../assets/icons/share_icon.png')}
                 resizeMode="contain"
                 style={styles.shareImgStyle}
               />
-              {loading ? <ActivityIndicator size={"small"} />
-                :
+              {loading ? (
+                <ActivityIndicator size={'small'} />
+              ) : (
                 <Pressable
-                  onPress={details?.tours_in_wishlist == "NO" ? tour_wishAdd : tour_wishRemove}>
-                  {details?.tours_in_wishlist == "NO" ? <Ionicons name="heart-outline" size={25} color="#fff" /> : <Ionicons name="heart" size={25} color="red" />}
+                  onPress={
+                    details?.tours_in_wishlist == 'NO'
+                      ? tour_wishAdd
+                      : tour_wishRemove
+                  }>
+                  {details?.tours_in_wishlist == 'NO' ? (
+                    <Ionicons name="heart-outline" size={25} color="#fff" />
+                  ) : (
+                    <Ionicons name="heart" size={25} color="red" />
+                  )}
                 </Pressable>
-              }
+              )}
             </View>
-
           </View>
           <Image
-            source={{ uri: details?.tours_image }}
+            source={{uri: details?.tours_image}}
             resizeMode="cover"
-            style={{ width: "100%", height: "100%" }}
+            style={{width: '100%', height: '100%'}}
           />
           <MyStatusBar backgroundColor={'transparent'} />
         </View>
-        <View style={{ padding: 20, paddingHorizontal: 25 }}>
+        <View style={{padding: 20, paddingHorizontal: 25}}>
           <Text
             style={{
               fontSize: 25,
@@ -134,16 +156,24 @@ const HomeTourDetailScreen = ({ route }) => {
             }}>
             {item?.tours_name}
           </Text>
-          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+          <View style={{flexDirection: 'row', marginTop: 15}}>
             <Image
-              style={{ width: 20, height: 20 }}
+              style={{width: 20, height: 20}}
               source={require('../../assets/tabIcons/tours_icon.png')}
             />
             <Text style={styles.addressTxtStyle}>
               {details?.tours_location}
             </Text>
           </View>
-          <View style={{ flexDirection: 'row', borderTopWidth: 1, borderBottomWidth: 1, marginVertical: 15, paddingVertical: 12, borderColor: "#E7E7E7" }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              borderTopWidth: 1,
+              borderBottomWidth: 1,
+              marginVertical: 15,
+              paddingVertical: 12,
+              borderColor: '#E7E7E7',
+            }}>
             <Image
               source={require('../../assets/dummyImages/user_dummy_icon_3.png')}
               style={styles.circleImgStyl}
@@ -153,6 +183,8 @@ const HomeTourDetailScreen = ({ route }) => {
               style={{
                 alignSelf: 'center',
                 marginLeft: 15,
+                marginTop: 15,
+                width: '70%',
               }}>
               <Text
                 style={{
@@ -160,9 +192,9 @@ const HomeTourDetailScreen = ({ route }) => {
                   fontSize: 25,
                   fontFamily: Theme.FONT_FAMILY_BOLD,
                 }}>
-                Carter Schleifer
+                {details?.full_name}
               </Text>
-              <Text
+              {/* <Text
                 style={{
                   color: 'black',
                   fontSize: 13,
@@ -170,15 +202,33 @@ const HomeTourDetailScreen = ({ route }) => {
                   marginTop: 4,
                 }}>
                 Johan Smiths
-              </Text>
+              </Text> */}
             </View>
+            <Pressable
+              style={{
+                alignSelf: 'center',
+
+                marginTop: 10,
+              }}
+              onPress={() => {
+                navigation.navigate('Chat', {
+                  chats_receiver_id: details?.tours_users_id,
+                  reciever_name: details?.full_name,
+                  tours_id: details?.tours_id,
+                });
+              }}>
+              <Image
+                style={styles.callImgStyl}
+                source={require('../../assets/icons/messenger.png')}
+              />
+            </Pressable>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text
               onPress={() => setIsDetailsSelected(true)}
               style={[
                 styles.tabFirstTxtStyl,
-                { borderBottomWidth: isDetailsSelected ? 4 : 0 },
+                {borderBottomWidth: isDetailsSelected ? 4 : 0},
               ]}>
               Details
             </Text>
@@ -186,7 +236,7 @@ const HomeTourDetailScreen = ({ route }) => {
               onPress={() => setIsDetailsSelected(false)}
               style={[
                 styles.tabFirstTxtStyl,
-                { borderBottomWidth: !isDetailsSelected ? 4 : 0 },
+                {borderBottomWidth: !isDetailsSelected ? 4 : 0},
               ]}>
               Review
             </Text>
@@ -198,17 +248,18 @@ const HomeTourDetailScreen = ({ route }) => {
               marginVertical: 10,
               height: isDetailsSelected ? null : 0,
             }}>
-            <Text style={{ color: '#4A4A4A', fontSize: 14, textAlign: 'justify' }}>
+            <Text
+              style={{color: '#4A4A4A', fontSize: 14, textAlign: 'justify'}}>
               {item?.tours_description}
             </Text>
             <View
-              onPress={() => { }}
+              onPress={() => {}}
               style={{
                 width: '100%',
                 height: 288,
                 marginTop: 20,
                 marginBottom: 100,
-                borderRadius: 20
+                borderRadius: 20,
               }}>
               <CustomMapView />
             </View>
@@ -216,7 +267,7 @@ const HomeTourDetailScreen = ({ route }) => {
         </View>
       </ScrollView>
       <View style={styles.priceContainer}>
-        <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+        <View style={{flexDirection: 'column', justifyContent: 'center'}}>
           <Text
             style={{
               color: '#2F4858',
@@ -238,7 +289,7 @@ const HomeTourDetailScreen = ({ route }) => {
         <MyButton
           title={'Book'}
           loading={false}
-          onPress={() => navigation.navigate('Payment', { item: details })}
+          onPress={() => navigation.navigate('Payment', {item: details})}
           textStyle={{
             fontSize: 18,
             fontFamily: Theme.FONT_FAMILY_SEMIBOLD,
@@ -255,7 +306,6 @@ const HomeTourDetailScreen = ({ route }) => {
         />
       </View>
     </View>
-
   );
 };
 
@@ -273,15 +323,15 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   topIconsContainer: {
-    position: "absolute",
+    position: 'absolute',
     zIndex: 1,
     top: 60,
-    width: "90%",
-    alignSelf: "center",
+    width: '90%',
+    alignSelf: 'center',
     padding: 5,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row"
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   backImgStyle: {
     width: 32,
@@ -300,7 +350,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 12,
     fontFamily: Theme.FONT_FAMILY_MEDIUM,
-    fontWeight: "800"
+    fontWeight: '800',
   },
   circleImgStyl: {
     width: 75,
@@ -348,7 +398,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderColor: Theme.PRIMARY_COLOR,
     paddingBottom: 5,
-    marginRight: 25
+    marginRight: 25,
   },
   tabSecondTxtStyl: {
     color: 'black',
@@ -358,6 +408,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderColor: Theme.PRIMARY_COLOR,
     paddingBottom: 5,
+  },
+  callImgStyl: {
+    width: 20,
+    height: 20,
+    tintColor: Theme.PRIMARY_COLOR,
   },
 });
 

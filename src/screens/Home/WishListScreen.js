@@ -1,57 +1,64 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Image, View, Text, FlatList, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  Image,
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  Pressable,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 import Theme from '../../theme';
 import MyStatusBar from '../../elements/MyStatusBar';
-import { useFocusEffect } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { get_wish_list } from '../../services/Api';
+import {useFocusEffect} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {get_wish_list} from '../../services/Api';
 
-const WishListScreen = ({ route }) => {
-  const userDetails = useSelector((state) => state?.auth)
+const WishListScreen = ({route}) => {
+  const userDetails = useSelector(state => state?.auth);
   const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
   const getWishlistHandler = () => {
-    setLoading(true)
-    get_wish_list(userDetails?.user?.id).then((res) => {
-      console.log("res",res)
-      if (res?.status == "1") {
-        setData(res?.wish_lists)
-      }
-    }).catch((err) => {
-      console.log("err", err)
-    }).finally(() => {
-      setLoading(false)
-    })
-  }
+    setLoading(true);
+    get_wish_list(userDetails?.user?.id)
+      .then(res => {
+        console.log('res', res);
+        if (res?.status == '1') {
+          setData(res?.wish_lists);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   useFocusEffect(
     React.useCallback(() => {
       getWishlistHandler();
     }, []),
   );
 
-
-
-
-  const WishListDataRender = ({ item }) => {
+  const WishListDataRender = ({item}) => {
     return (
       <Pressable
-        onPress={() => navigation.navigate("HomeTourDetails", { item })}
+        onPress={() => navigation.navigate('HomeTourDetails', {item})}
         style={{
           flexDirection: 'column',
           height: 116,
           marginTop: 10,
         }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <Image
-            source={{ uri: item?.tour_image }}
-            style={{ width: 100, height: 95, borderRadius: 20 }}
+            source={{uri: item?.tour_image}}
+            style={{width: 100, height: 95, borderRadius: 20}}
             resizeMode="stretch"
           />
-          <View style={{ flex: 1, paddingHorizontal: 10, paddingBottom: 10 }}>
+          <View style={{flex: 1, paddingHorizontal: 10, paddingBottom: 10}}>
             <Text
               style={{
                 fontSize: 20,
@@ -62,9 +69,9 @@ const WishListScreen = ({ route }) => {
               {item.tours_name}
             </Text>
 
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <View style={{flexDirection: 'row', marginTop: 10}}>
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{width: 20, height: 20}}
                 source={require('../../assets/tabIcons/tours_icon.png')}
               />
               <Text
@@ -109,8 +116,7 @@ const WishListScreen = ({ route }) => {
   };
 
   return (
-    <View
-      style={{ height: '100%', backgroundColor: '#fff', padding: 15 }}>
+    <View style={{height: '100%', backgroundColor: '#fff', padding: 15}}>
       <MyStatusBar backgroundColor={'#fff'} />
       <Text
         style={{
@@ -123,33 +129,32 @@ const WishListScreen = ({ route }) => {
         WishList
       </Text>
 
-      {loading ?
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <ActivityIndicator size={"small"} />
+      {loading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size={'small'} />
         </View>
-        :
-        data?.length === 0 ?
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text
-              style={{
-                justifyContent: 'center',
-                fontSize: 16,
-                fontFamily: Theme.FONT_FAMILY_MEDIUM,
-                color: 'black',
-                marginLeft: 20,
-              }}>
-              No Data here
-            </Text>
-          </View>
-          :
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            style={{ paddingTop: 18, flex: 1 }}
-            data={data}
-            renderItem={WishListDataRender}
-          />
-      }
+      ) : data?.length === 0 ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text
+            style={{
+              justifyContent: 'center',
+              fontSize: 16,
+              fontFamily: Theme.FONT_FAMILY_MEDIUM,
+              color: 'black',
+              marginLeft: 20,
+            }}>
+            No Data here
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          style={{paddingTop: 18, flex: 1}}
+          data={data}
+          renderItem={WishListDataRender}
+        />
+      )}
     </View>
   );
 };
